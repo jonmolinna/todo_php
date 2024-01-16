@@ -1,7 +1,6 @@
 <?php
-
     print('
-        <div class="space-y-12 pb-10">
+        <div class="pb-7">
             <form
                 method="POST" 
                 class="max-w-sm mx-auto space-y-5 border border-gray-300 mt-10 px-4 py-10 rounded-md shadow-md"
@@ -77,47 +76,54 @@
                     Crea tu Cuenta
                 </button>
             </form>
-
-            <div class="max-w-sm mx-auto space-y-2 border border-gray-300 px-4 py-4 rounded-md shadow-md">
-                <p class="text-center text-sm">
-                    ¿Tienes una cuenta?
-                </p>
-                <a 
-                    href="login"
-                    class="block text-center text-pink-700 border-2 border-pink-700 p-2 rounded-md hover:bg-pink-700 hover:text-white"
-                >
-                    Inicia Sesión
-                </a>
-            </div>
         </div>
     ');
 
     if (isset($_POST['r']) && isset($_POST['register'])) {
-
         if ($_POST['r'] == 'register' && $_POST['register'] == 'set') {
-            $errors = array();
-            $nameRegex = "/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/";
-    
-            if (empty($_POST['name'])) {
-                $errors = array('name' => 'Ingrese un nombre');
-            }
-            else if (strlen($_POST['name']) <= 3) {
-                $errors = array('name' => 'El nombre debe tener mas de tres caracteres');
-            }
-            else if (!preg_match($nameRegex, $_POST['name'])) {
-                $errors = array('name' => 'El nombre solo acepta letras y espacios');
-            }
+            $form = array(
+                'name' => $_POST['name'],
+                'email' => $_POST['email'],
+                'password' => $_POST['password'],
+                'confirmPassword' => $_POST['confirmPassword']
+            );
 
-            if (empty($_POST['email'])) {
-                $errors = array('email' => 'Ingrese un email');
-            }
-    
-            print_r($_POST);
-    
-            echo 'Hola Mundo estoy aqui';
+            $validade_register = new ValidateRegister();
+            $user_controller = new UsersController();
+            $errors = $validade_register->validar_register($form);
 
-            print_r($errors);
+            if (empty($errors)) {
+                $body = array(
+                    'name' => $_POST['name'],
+                    'email' => $_POST['email'],
+                    'password' => $_POST['password']
+                );
+
+                $data = $user_controller->addUser($body);
+
+            } else {
+                $template_errors = '<div class="max-w-sm mx-auto px-4 mb-4">';
+                foreach ($errors as $error) {
+                    $template_errors .= '
+                        <p class="text-base font-medium text-red-700">' . $error  . '</p> '
+                    ;
+                }
+                $template_errors .= '</div>';
+                print($template_errors);
+            }
         }
     }
 
-// 
+    print('
+        <div class="max-w-sm mx-auto space-y-2 border border-gray-300 px-4 py-4 rounded-md shadow-md">
+            <p class="text-center text-sm">
+                ¿Tienes una cuenta?
+            </p>
+            <a 
+                href="login"
+                class="block text-center text-pink-700 border-2 border-pink-700 p-2 rounded-md hover:bg-pink-700 hover:text-white"
+            >
+                Inicia Sesión
+            </a>
+        </div>
+    ');
