@@ -1,5 +1,4 @@
 <?php
-
     class ValidateRegister {
         private $model_users;
         private $nameRegex = "/^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/";

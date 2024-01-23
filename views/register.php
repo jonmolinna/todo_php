@@ -2,6 +2,7 @@
     print('
         <div class="pb-7">
             <form
+                id="form-register"
                 method="POST" 
                 class="max-w-sm mx-auto space-y-5 border border-gray-300 mt-10 px-4 py-10 rounded-md shadow-md"
             >
@@ -17,7 +18,7 @@
                         id="name"
                         name="name"
                         placeholder=""
-                      
+                        required
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     >
                 </div>
@@ -33,7 +34,7 @@
                         id="email"
                         name="email"
                         placeholder="example@gmail.com"
-                 
+                        required
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     >
                 </div>
@@ -48,7 +49,7 @@
                         type="password"
                         id="password"
                         name="password"
-     
+                        required     
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     >
                 </div>
@@ -63,7 +64,7 @@
                         type="password"
                         id="confirmPassword"
                         name="confirmPassword"
-          
+                        required          
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     >
                 </div>
@@ -71,7 +72,7 @@
                 <input type="hidden" name="register" value="set" >
                 <button
                     type="submit"
-                    class="text-white bg-pink-700 hover:bg-pink-800 focus:outline-none focus:ring-pink-300 font-medium rounded-md text-base w-full p-2"
+                    class="text-white bg-pink-700 hover:bg-pink-800 focus:outline-none focus:ring-pink-300 font-medium rounded-md text-base w-full p-2 disabled:bg-pink-500"
                 >
                     Crea tu Cuenta
                 </button>
@@ -99,7 +100,22 @@
                     'password' => $_POST['password']
                 );
 
-                $data = $user_controller->addUser($body);
+                $user_controller->add_user($body);
+
+                $template_success = '
+                    <div class="max-w-sm mx-auto mb-4">
+                        <p class="text-center bg-green-700 text-white py-2 rounded-md">
+                            El usuario se registro correctamente
+                        </p>
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            reloadPage("login");
+                        }
+                    </script>
+                ';
+
+                print($template_success);
 
             } else {
                 $template_errors = '<div class="max-w-sm mx-auto px-4 mb-4">';

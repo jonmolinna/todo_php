@@ -23,7 +23,6 @@
             }
 
             $this->query = "INSERT INTO users (email, name, password) VALUES ('$email', '$name', '$password')";
-
             $this->set_query();
         }
 
