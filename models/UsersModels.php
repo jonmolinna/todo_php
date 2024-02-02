@@ -22,7 +22,13 @@
                 $$key = $value;
             }
 
-            $this->query = "INSERT INTO users (email, name, password) VALUES ('$email', '$name', '$password')";
+            $options = [
+                'cost' => 12,
+            ];
+
+            $hass_password = password_hash("$password", PASSWORD_BCRYPT, $options);
+
+            $this->query = "INSERT INTO users (email, name, password) VALUES ('$email', '$name', '$hass_password')";
             $this->set_query();
         }
 

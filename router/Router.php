@@ -5,10 +5,36 @@
 
         public function __construct($route) {
             $session_options = array();
-            $auth = null;
 
-            if ($auth) {
-                echo 'Bienvenido al sistema';
+            if (!isset($_SESSION)) {
+                session_start();
+            }
+
+            if (!isset($_SESSION['ok'])) {
+                $_SESSION['ok'] = false;
+            }
+
+            if ($_SESSION['ok']) {
+                $this->route = isset($_GET['r']) ? $_GET['r'] : 'home';
+                $controller = new ViewController();
+
+                switch ($this->route) {
+                    case 'home':
+                        $controller->load_view('home');
+                        break;
+                    case 'todo':
+                        $controller->load_view('todoList');
+                        break;
+                    case 'todoAdd':
+                        $controller->load_view('todoAdd');
+                        break;
+                    case 'completed':
+                        $controller->load_view('completed');
+                        break;
+                    default:
+                        $controller->load_view('error404');
+                        break;
+                }
             }
             else {
                 $this->route = isset($_GET['r']) ? $_GET['r'] : 'login';
@@ -22,12 +48,6 @@
                         $controller->load_view('register');
                         break;
                 }
-
-
-                // if (!isset($_POST['email']) && !isset($_POST['password'])) {
-                //     $login_form = new ViewController();
-                //     $login_form->load_view('login');
-                // }
             }
         }
     }
